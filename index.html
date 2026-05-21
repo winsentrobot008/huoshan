@@ -29,12 +29,20 @@
             const status = document.getElementById('status');
             if(!text){status.textContent='请输入内容';return;}
             status.textContent='处理中...';
+            // 自动适配双平台路径
+            let apiPath = '/.netlify/functions/generate';
+            if(location.host.includes('vercel.app')){
+                apiPath = '/api/generate';
+            }
             try{
-                const res = await fetch('/.netlify/functions/generate',{
+                const res = await fetch(apiPath,{
                     method:'POST',
                     headers:{'Content-Type':'application/json'},
                     body:JSON.stringify({text})
                 });
+                if(!res.ok){
+                    throw new Error('HTTP error! status: ' + res.status);
+                }
                 const data = await res.json();
                 status.textContent='✅ 处理完成：'+JSON.stringify(data);
             }catch(e){
