@@ -1,40 +1,48 @@
-﻿export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+﻿exports.handler = async (event) => {
+    // 增加详细日志，方便排查问题
+    console.log("收到请求，headers:", event.headers);
+    console.log("收到请求，body:", event.body);
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ code: 405, msg: 'Method Not Allowed' });
+    // 检查请求方法
+    if (event.httpMethod !== "POST") {
+        return {
+            statusCode: 405,
+            body: JSON.stringify({ error: "Method Not Allowed" })
+        };
+    }
 
-  const { text } = req.body;
-  if (!text) return res.status(400).json({ code: 400, msg: '缺少文案内容' });
+    try {
+        // 解析请求体
+        const body = JSON.parse(event.body);
+        const text = body.text;
 
-  const API_KEY = process.env.VOLC_ARK_KEY;
-  const BASE_URL = 'https://ark.cn-beijing.volces.com/api/v3';
+        if (!text) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ error: "Text is required" })
+            };
+        }
 
-  try {
-    const llmRes = await fetch(`${BASE_URL}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'doubao-pro',
-        messages: [
-          {
-            role: 'system',
-            content: '把用户中文文案拆成短视频分镜，输出纯JSON：[{"scene":"场景","en_text":"美式英文解说","img_prompt":"画面提示词"}]，不要多余文字'
-          },
-          { role: 'user', content: text }
-        ],
-        temperature: 0.3
-      })
-    });
-    const llmData = await llmRes.json();
-    const sceneList = JSON.parse(llmData.choices[0].message.content);
-    return res.status(200).json({ code: 200, msg: '成功', sceneData: sceneList });
-  } catch (err) {
-    return res.status(500).json({ code: 500, msg: err.message });
-  }
-}
+        // 模拟API调用，返回测试数据（先跳过真实API，排查函数本身问题）
+        const mockResponse = {
+            success: true,
+            inputText: text,
+            message: "✅ 函数运行正常！API调用部分已跳过，请检查环境变量VOLC_ARK_KEY是否正确配置。"
+        };
+
+        return {
+            statusCode: 200,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(mockResponse)
+        };
+
+    } catch (error) {
+        console.error("函数执行错误:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "Server error", details: error.message })
+        };
+    }
+};
