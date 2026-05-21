@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI文案转英文视频</title>
+    <title>AI文案转英文视�?/title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{background:#0f172a;color:#fff;padding:30px;max-width:1000px;margin:auto}
@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="box">
-        <h2>📹 中文文案 → 英文配音 + 英文字幕视频</h2>
+        <h2>📹 中文文案 �?英文配音 + 英文字幕视频</h2>
         <textarea id="text" placeholder="输入你的故事..."></textarea>
         <button onclick="go()">生成</button>
         <p id="status" style="margin-top:20px"></p>
@@ -23,10 +23,10 @@
     <script>
         async function go(){
             const t = document.getElementById('text').value
-            document.getElementById('status').innerText = '处理中...'
-            const r = await fetch('/api/generate',{method:'POST',body:JSON.stringify({text:t}),headers:{'Content-Type':'application/json'}})
+            document.getElementById('status').innerText = '处理�?..'
+            const r = await fetch('/.netlify/functions/generate',{method:'POST',body:JSON.stringify({text:t}),headers:{'Content-Type':'application/json'}})
             const d = await r.json()
-            document.getElementById('status').innerText = d.code===200?'✅ 成功':'❌ 失败'
+            document.getElementById('status').innerText = d.code===200?'�?成功':'�?失败'
         }
     </script>
 </body>
