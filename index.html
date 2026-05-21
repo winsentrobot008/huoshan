@@ -1,33 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI鏂囨杞嫳鏂囪棰?/title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{background:#0f172a;color:#fff;padding:30px;max-width:1000px;margin:auto}
-        .box{background:#1e293b;padding:30px;border-radius:16px}
-        h2{margin-bottom:20px;color:#38bdf8}
-        textarea{width:100%;height:240px;padding:15px;border-radius:10px;background:#334155;color:white;border:none}
-        button{padding:15px 30px;background:#2563eb;color:white;border:none;border-radius:10px;margin-top:20px}
-    </style>
+    <title>测试页面</title>
 </head>
 <body>
-    <div class="box">
-        <h2>馃摴 涓枃鏂囨 鈫?鑻辨枃閰嶉煶 + 鑻辨枃瀛楀箷瑙嗛</h2>
-        <textarea id="text" placeholder="杈撳叆浣犵殑鏁呬簨..."></textarea>
-        <button onclick="go()">鐢熸垚</button>
-        <p id="status" style="margin-top:20px"></p>
-    </div>
-    <script>
-        async function go(){
-            const t = document.getElementById('text').value
-            document.getElementById('status').innerText = '澶勭悊涓?..'
-            const r = await fetch('/.netlify/functions/generate',{method:'POST',body:JSON.stringify({text:t}),headers:{'Content-Type':'application/json'}})
-            const d = await r.json()
-            document.getElementById('status').innerText = d.code===200?'鉁?鎴愬姛':'鉂?澶辫触'
-        }
-    </script>
+    <h1 style="color: green;">? 页面加载成功！</h1>
+    <p>如果能看到这句话，说明部署没问题，是你原来的代码导致了白屏。</p>
 </body>
 </html>
